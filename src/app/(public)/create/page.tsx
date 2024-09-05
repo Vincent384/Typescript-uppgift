@@ -1,6 +1,7 @@
 'use client'
+import { Create } from '@/app/components/Create'
 import React from 'react'
-import { Create } from '../components/Create'
+
 
 
 

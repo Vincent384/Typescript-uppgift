@@ -1,6 +1,8 @@
 "use client"
 import React from 'react'
 import { useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
+
 
 type Comment = {
     content: string;
@@ -29,6 +31,8 @@ function Thread() {
     const [threadId, setThreadId] = useState<string>("");
   
     const [newComment, setNewComment] = useState<string>("");
+
+    
   
     const key = "forum/threads"; // Adjust this key as needed
   
@@ -68,6 +72,14 @@ function Thread() {
     const handleCommentSubmit = (e: React.FormEvent) => {
       e.preventDefault();
   
+      const authStorage = localStorage.getItem('loggedIn')
+      
+      if(!authStorage || authStorage === null){
+        console.log('hej')
+        toast.error('You need to Login to be able to comment')
+        return 
+      }
+      
       if (newComment.trim() === "") return;
   
       const updatedComments: Comment[] = [
@@ -111,6 +123,7 @@ function Thread() {
             <div className="d-thread-container-top">
               <div className="d-thread-container-top-width">
                 <span className='d-thread-poster'>Peter</span>
+                <Toaster reverseOrder={false}/> 
                 <span className='d-thread-category'>{data.category}</span>
               </div>
                 <h2 className='d-thread-title'>{data.title}</h2>

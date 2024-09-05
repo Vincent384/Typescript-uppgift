@@ -1,7 +1,6 @@
 type ThreadCategory = "THREAD" | "QNA";
 
 type User = {
-	userName: string;
   userId: number;
 }
 
@@ -35,4 +34,22 @@ type SubmitForm = {
 
 type ErrorForm = SubmitForm & {
 	selection:string
+}
+
+type LoginForm = {
+	email:string,
+	password:string
+}
+
+type RegisterForm = {
+	userName:string,
+	email:string,
+	password:string
+}
+
+type CreateNewUser = RegisterForm &{
+	userId:string,
+	userName:string,
+	email:string,
+	password:string
 }
