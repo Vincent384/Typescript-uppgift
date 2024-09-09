@@ -55,6 +55,7 @@ export const Create = () => {
           title:form.title,
           description: form.description,
           creationDate:new Date,
+          locked:false
       }
 
       const newSubjectString = JSON.stringify(newSubject)
