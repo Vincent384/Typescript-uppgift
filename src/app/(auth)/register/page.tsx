@@ -1,11 +1,13 @@
 'use client'
 import { registerValidate } from '@/app/components/registerValidate';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 
 
 const Register = () => {
+    const router = useRouter()
     const [form, setForm] = useState<RegisterForm>({
         userName:'',
         email:'',
@@ -57,7 +59,7 @@ const Register = () => {
               allUser = JSON.parse(oldStorage)
             }
             
-            const userExixts = allUser.filter((user) => user.email === form.email)       
+            const userExixts = allUser.some((user) => user.email === form.email)       
             
             if(userExixts){
                 toast.error('User already exixts with this email')
@@ -74,6 +76,7 @@ const Register = () => {
             
             allUser.push(newUser)
             localStorage.setItem("registered", JSON.stringify(allUser)) 
+            toast.success('Account created')
 
     }
       return (

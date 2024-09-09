@@ -35,17 +35,18 @@ const LandingPage: React.FC = () => {
     }
     function getUser(){
       const getData = localStorage.getItem('loggedIn')
-      const checkUser = JSON.parse(getData as string)
-      if(!checkUser){
+      const checkUser = JSON.parse(getData as string || 'null')
+      if(checkUser){
+        setCheckUser(false)
+      }else{
         setCheckUser(true)
-        return 
       }
     } 
 
 
       getUser()
       getData();
-  }, []);
+  }, [checkUser]);
 
   const handleNavigation = (id: string) => {
     if(lockThread){
@@ -84,9 +85,8 @@ function onSetLockHandler(){
                 <div className='flex justify-center items-center'>
                   <p className="text-center text-lg mt-2 p-5">{thread.description}</p>
                   {
-                    checkUser ?
+                    !checkUser &&
                     <Lock onClick={onSetLockHandler} className='cursor-pointer' /> 
-                    :''
                   }
                 </div>
               </div>

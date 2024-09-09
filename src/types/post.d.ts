@@ -12,6 +12,7 @@ interface Thread {
 	creationDate: Date;
 	creator?: User;
 	comments?: ThreadComment[];
+	locked?:boolean
 }
 
 type QNAThread =  Thread & { //Type extension

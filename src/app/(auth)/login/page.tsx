@@ -37,23 +37,30 @@ function onSubmitHandler(e: React.FormEvent<HTMLFormElement>){
 
 
       let allRegistered = []
-     const getRegistered = localStorage.getItem('registered')
-      
-     allRegistered = JSON.parse(getRegistered as string)
-    const findEmail = allRegistered.findIndex((prev: { email: string; }) => prev.email === form.email)
-    const findPassword = allRegistered[0].password === form.password
+     const getRegistered = localStorage.getItem('registered') 
+        
+        allRegistered = JSON.parse(getRegistered as string)
+
+        if(allRegistered === null){
+            return toast.error('Could not find any with that mail. Please register')
+        }
+
+    const user = allRegistered.find((prev: { email: string; }) => prev.email === form.email)
     
-    if(findEmail === -1){
-        toast.error(`Could not find any email or password`)
+    if(!user){
+        toast.error('Password or email is incorrect')
         return
-    }else if(!findPassword){
-        toast.error(`Could not find any email or password`)
+    }
+    
+    if (user.password !== form.password) {
+        toast.error('Password or email is incorrect')
+        console.log('hej')
         return
     }
 
     toast.success('Login successful')
     
-    localStorage.setItem('loggedIn',JSON.stringify(allRegistered[0]))
+    localStorage.setItem('loggedIn',JSON.stringify(user))
     
     setTimeout(() => {
         router.push('/')      

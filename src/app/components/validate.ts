@@ -10,7 +10,7 @@ if(form.title.length <= 2){
  titleError = 'Must fill a title with at least 3 characters long'
 }
 
-if(form.description.length <= 10){
+if(form.description.length <= 5){
     descriptionError = 'Description must be at least 10 characters long'
 }
 
