@@ -18,7 +18,6 @@ const LandingPage: React.FC = () => {
   const router = useRouter();
   const [threads, setThreads] = useState<Thread[]>([]);
   const [checkUser, setCheckUser] = useState<boolean>(false)
-  const [lockedColor, setLockedColor] = useState(false)
 
   useEffect(() => {
     function getData() {
@@ -53,8 +52,9 @@ const LandingPage: React.FC = () => {
         : thread
       ))
 
-      localStorage.setItem('lockedThreads',JSON.stringify(updatedThreads))
-  setThreads(updatedThreads)
+      localStorage.setItem('forum/threads',JSON.stringify(updatedThreads))
+
+      setThreads(updatedThreads)
   
 } catch (error) {
   console.log(error)
@@ -116,7 +116,7 @@ return (
                   </h2>
                   {
                     thread.locked && (
-                      <span>Locked</span>
+                      <span className='mt-2 p-5'>Thread closed</span>
                     )
                   }
                 </div>

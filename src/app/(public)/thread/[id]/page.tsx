@@ -89,7 +89,7 @@ function Thread() {
         return 
       }      
      
-      const getLockedThreads = localStorage.getItem('lockedThreads')
+      const getLockedThreads = localStorage.getItem('forum/threads')
       let allThreads:Thread[] = []
   
       if(getLockedThreads !==  null){
@@ -204,7 +204,7 @@ function Thread() {
             </div>
             <div className="d-thread-container-bottom">
                 {data.comments.map((comment, index) => (
-                        <div key={index} className="bg-blue-200 p-5 rounded-lg">
+                        <div key={index} className="bg-blue-200 p-5 rounded-lg my-3">
                             <span className='bg-slate-700 text-white p-2 '>{comment.creator}</span>
                             <div className='flex justify-between items-center mt-3'>
                               <p className=''>{comment.content}</p>

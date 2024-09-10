@@ -1,26 +1,24 @@
 'use client'
-import { set } from 'lodash'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 
 
 export const Navbar = () => {
 
-  const [checkUser, setCheckUser] = useState<boolean>(true)
   const [loggedUser, setLoggedUser] = useState<User | null>(null)
+  const router = useRouter()
 
 useEffect(() => {
 function getUser(){
     const getData = localStorage.getItem('loggedIn')
     const user:User = JSON.parse(getData as string)
     if(user){
-      setCheckUser(false)
       setLoggedUser(user)
-    }else{
-      setCheckUser(true)
     }
   } 
+
 getUser()
 
 }, [])
@@ -29,7 +27,7 @@ getUser()
   function onLogOutHandler(){
       localStorage.removeItem('loggedIn')
       toast.success('Logged out successfully')
-      setCheckUser(true)
+      setLoggedUser(null)
   } 
 
   return (
@@ -43,11 +41,11 @@ getUser()
               )
             }
           {
-            checkUser && 
+            !loggedUser && 
             <Link href={'/login'}><button className='py-2 px-4 bg-yellow-600 rounded-md text-white font-bold hover:bg-yellow-700 transition-colors'>Login</button></Link>            
           }
           {
-            !checkUser &&
+            loggedUser &&
             <Link href={'/login'}><button onClick={onLogOutHandler} className='py-2 px-4
              bg-yellow-600 rounded-md text-white font-bold hover:bg-yellow-700 transition-colors'>Log out</button></Link>
           }
