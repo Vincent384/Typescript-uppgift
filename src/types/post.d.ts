@@ -1,8 +1,5 @@
 type ThreadCategory = "THREAD" | "QNA";
 
-type User = {
-  userId: number;
-}
 
 interface Thread {
 	id: string;
@@ -25,7 +22,7 @@ type ThreadComment = {
 	id: User;
 	thread: Thread;
 	content: string;
-	creator: "GUEST";
+	creator: string;
 }
 
 type SubmitForm = {
@@ -48,9 +45,6 @@ type RegisterForm = {
 	password:string
 }
 
-type CreateNewUser = RegisterForm &{
+type User = RegisterForm &{
 	userId:string,
-	userName:string,
-	email:string,
-	password:string
 }

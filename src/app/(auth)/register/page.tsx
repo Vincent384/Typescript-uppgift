@@ -52,7 +52,7 @@ const Register = () => {
           
           
           const oldStorage = localStorage.getItem('registered')
-          let allUser:CreateNewUser[] = []
+          let allUser:User[] = []
           
           console.log(oldStorage)
           if(oldStorage !==  null){
@@ -67,7 +67,7 @@ const Register = () => {
             }
             
             
-            const newUser:CreateNewUser = ({
+            const newUser:User = ({
               userId:crypto.randomUUID(),
               userName:form.userName,
               email:form.email,

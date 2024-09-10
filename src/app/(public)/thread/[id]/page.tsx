@@ -1,4 +1,5 @@
 "use client"
+import { useParams, useRouter } from 'next/navigation';
 import React from 'react'
 import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
@@ -6,7 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 type Comment = {
     content: string;
-    creator: "GUEST";
+    creator: string;
 }
 
 type Data = {
@@ -29,12 +30,12 @@ function Thread() {
     });
   
     const [threadId, setThreadId] = useState<string>("");
-  
+    const [loggedUser, setLoggedUser] = useState<User | null>(null)
     const [newComment, setNewComment] = useState<string>("");
-
+    const {id} = useParams()
     
-  
-    const key = "forum/threads"; // Adjust this key as needed
+    
+    const key = "forum/threads"; 
   
     useEffect(() => {
       const getIdFromUrl = () => {
@@ -61,30 +62,54 @@ function Thread() {
           console.error("Failed to parse data from localStorage", error);
         }
       }
+
+      function getUser(){
+        const findUser = localStorage.getItem('loggedIn')
+        if(!findUser){
+          return
+        }
+        const user:User = JSON.parse(findUser)
+        setLoggedUser(user)
+      }
+      getUser()
     }, [])
 
-    //useEffect ends here
+
   
     const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setNewComment(e.target.value);
     };
-  
+    
     const handleCommentSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-  
-      const authStorage = localStorage.getItem('loggedIn')
       
-      if(!authStorage || authStorage === null){
-        console.log('hej')
+      if(!loggedUser){
         toast.error('You need to Login to be able to comment')
         return 
+      }      
+     
+      const getLockedThreads = localStorage.getItem('lockedThreads')
+      let allThreads:Thread[] = []
+  
+      if(getLockedThreads !==  null){
+       allThreads = JSON.parse(getLockedThreads)
       }
+      
+      const findLockedThreads = allThreads.findIndex((thread)=>(
+        thread.id === id
+      ))
+  
+      if(findLockedThreads !== -1 && allThreads[findLockedThreads].locked === true){
+        toast.error('This thread is locked')
+        return
+      }
+
       
       if (newComment.trim() === "") return;
   
       const updatedComments: Comment[] = [
         ...data.comments,
-        { content: newComment, creator: "GUEST" },
+        { content: newComment, creator: loggedUser.userName },
       ];
   
       const updatedData = {
@@ -122,9 +147,14 @@ function Thread() {
         <div className="d-thread-container">
             <div className="d-thread-container-top">
               <div className="d-thread-container-top-width">
-                <span className='d-thread-poster'>Peter</span>
+                <span className='d-thread-poster'>{loggedUser?.userName}</span>
                 <Toaster reverseOrder={false}/> 
-                <span className='d-thread-category'>{data.category}</span>
+                {
+                  data.category === 'QNA' ?
+                  <span className='text-white font-bold rounded-lg bg-orange-400 p-2'>{data.category}</span>
+                  : 
+                  <span className='text-white font-bold rounded-lg bg-blue-400 p-2'>{data.category}</span>
+                }
               </div>
                 <h2 className='d-thread-title'>{data.title}</h2>
             </div>
@@ -145,7 +175,6 @@ function Thread() {
                 </form>
             </div>
             <div className="d-thread-container-bottom">
-                <h3 id='commentLabel'>Comments</h3>
                 {data.comments.map((comment, index) => (
                         <div key={index} className="d-thread-container-bottom-comment">
                             <span className='comment-name'>{comment.creator}</span>

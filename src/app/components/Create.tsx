@@ -1,6 +1,6 @@
 'use client'
 import { Input } from '@/components/ui/input'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Select,
   SelectContent,
@@ -12,14 +12,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { validate } from './validate'
+import toast, { Toaster } from 'react-hot-toast'
 
 export const Create = () => {
   const [form, setForm] = useState<SubmitForm>({
     title: '',
     description: ''
   })
-
-  const [array, setArray] = useState<any | null>(null)
   
   const [error, setError] = useState<ErrorForm>({
     title:'',
@@ -27,8 +26,22 @@ export const Create = () => {
     selection:''
   })
   const [selection, setSelection] = useState<ThreadCategory | string>('')
+  const [loggedUser, setLoggedUser] = useState<User | null>(null)
+
   const router = useRouter()
 
+  useEffect(() => {
+    function getUser(){
+      const findUser = localStorage.getItem('loggedIn')
+      if(!findUser){
+        return
+      }
+      const user:User = JSON.parse(findUser)
+      setLoggedUser(user)
+    }
+    getUser()
+  }, [])
+  
 
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
     const { name, value } = e.target
@@ -40,26 +53,30 @@ export const Create = () => {
       }
     })
   }
-  console.log(array)
+
 
   function onSubmit(e:React.FormEvent<HTMLFormElement>){
     e.preventDefault()
+
+    if(!loggedUser){
+      toast.error('You need to log in to create a post')
+      return
+    }
 
     if(!validate(form,selection,setError)){
       return
     }
     try {
       const newSubject:Thread = {
-          id:crypto.randomUUID(),
-          category:selection as ThreadCategory,
-          title:form.title,
-          description: form.description,
-          creationDate:new Date,
-          locked:false
+        id:crypto.randomUUID(),
+        category:selection as ThreadCategory,
+        title:form.title,
+        description: form.description,
+        creationDate:new Date,
+        locked:false,
+        creator: loggedUser
       }
 
-      const newSubjectString = JSON.stringify(newSubject)
-   
        const oldStorage = localStorage.getItem('forum/threads')
         let allThreads = []
 
@@ -93,7 +110,7 @@ export const Create = () => {
           className='form-input'
         />
       </div>
-  
+    
       <label className='form-label'>Thread/QNA</label>
       <select onChange={e => setSelection(e.target.value)} className='form-select'>
         <option value="" disabled selected>select</option>
@@ -116,6 +133,8 @@ export const Create = () => {
       {error.title && <p className='error-message'>{error.title}</p>}
       {error.selection && <p className='error-message'>{error.selection}</p>}
       {error.description && <p className='error-message'>{error.description}</p>}
+      <Toaster reverseOrder={false}/> 
+
     </form>
   </div>
   )
