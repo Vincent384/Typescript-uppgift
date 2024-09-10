@@ -8,6 +8,7 @@ import toast, { Toaster } from 'react-hot-toast';
 type Comment = {
     content: string;
     creator: string;
+    isAnswer?: boolean
 }
 
 type Data = {
@@ -100,7 +101,7 @@ function Thread() {
       ))
   
       if(findLockedThreads !== -1 && allThreads[findLockedThreads].locked === true){
-        toast.error('This thread is locked')
+        toast.error('This thread is locked and cannot accept new comments.')
         return
       }
 
@@ -140,14 +141,41 @@ function Thread() {
       setData(updatedData);
       setNewComment("");
     };
-  
+
+    function markAsAnswer(index: number){
+      const updatedComments = data.comments.map((comment,i)=> ({
+        ...comment,
+        isAnswer:i=== index
+      }))
+
+      const updatedData = {
+        ...data,
+        comments:updatedComments
+      }
+      const localData = localStorage.getItem(key);
+      if (localData) {
+        try {
+          const parsedArray = JSON.parse(localData) as Data[];
+          const threadIndex = parsedArray.findIndex((thread) => thread.id === threadId);
+          if (threadIndex !== -1) {
+            parsedArray[threadIndex] = updatedData;
+            localStorage.setItem(key, JSON.stringify(parsedArray));
+            setData(updatedData);
+          } else {
+            console.error("Thread not found during update.");
+          }
+        } catch (error) {
+          console.error("Failed to update data in localStorage", error);
+        }
+      }
+
+    }
 
   return (
-    <div className='d-thread'>
+    <div className='flex justify-center items-center'>
         <div className="d-thread-container">
             <div className="d-thread-container-top">
               <div className="d-thread-container-top-width">
-                <span className='d-thread-poster'>{loggedUser?.userName}</span>
                 <Toaster reverseOrder={false}/> 
                 {
                   data.category === 'QNA' ?
@@ -176,10 +204,21 @@ function Thread() {
             </div>
             <div className="d-thread-container-bottom">
                 {data.comments.map((comment, index) => (
-                        <div key={index} className="d-thread-container-bottom-comment">
-                            <span className='comment-name'>{comment.creator}</span>
-                            <p className='comment-text'>{comment.content}</p>    
-                        </div>
+                        <div key={index} className="bg-blue-200 p-5 rounded-lg">
+                            <span className='bg-slate-700 text-white p-2 '>{comment.creator}</span>
+                            <div className='flex justify-between items-center mt-3'>
+                              <p className=''>{comment.content}</p>
+                              {data.category === 'QNA' && loggedUser && (
+                                  <button
+                                    onClick={() => markAsAnswer(index)}
+                                    className={`px-2 py-2 bg-emerald-700 text-white font-bold rounded-lg ${comment.isAnswer ? 'active' : ''}`}
+                                  >
+                                    {comment.isAnswer ? '✔ Answer' : 'Mark as Answer'}
+                                  </button>
+                                )}    
+                          </div>
+
+                            </div>
                     ))}
             </div>
         </div>

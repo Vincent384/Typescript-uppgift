@@ -80,10 +80,20 @@ return (
                 className={`bg-slate-300 rounded-xl flex flex-col p-5 m-2 gap-5 `}
                 key={thread.id}
               >
-                <div>
+                <div className='flex justify-between items-center'>
                   <span className='text-white font-bold rounded-lg bg-emerald-600 p-2'>
                       {thread.creator?.userName}
                   </span>
+                  <div>
+                {!checkUser && (
+                    <div onClick={() => onSetLockHandler(thread.id)}>
+                      {thread.locked ? (
+                        <Lock className='cursor-pointer text-red-600' />
+                      ) : (
+                        <Lock className='cursor-pointer text-gray-600' />
+                      )}
+                    </div>
+                  )}</div>
                 </div>
                 <div className='flex justify-between items-center'>
                 {
@@ -112,15 +122,7 @@ return (
                 </div>
                 <div className='flex justify-center items-center'>
                   <p className="text-center text-lg mt-2 p-5">{thread.description}</p>
-                  {!checkUser && (
-                    <div onClick={() => onSetLockHandler(thread.id)}>
-                      {thread.locked ? (
-                        <Lock className='cursor-pointer text-red-600' />
-                      ) : (
-                        <Lock className='cursor-pointer text-gray-600' />
-                      )}
-                    </div>
-                  )}
+
                 </div>
               </div>
             );
