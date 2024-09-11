@@ -48,3 +48,18 @@ type RegisterForm = {
 type User = RegisterForm &{
 	userId:string,
 }
+
+type UserComment = {
+    content: string;
+    creator: string;
+    isAnswer?: boolean
+}
+
+type Data = {
+    id: string;
+    category: string;
+    title: string;
+    description: string;
+    creationDate: string;
+    comments: UserComment[];
+  };

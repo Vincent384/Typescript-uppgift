@@ -5,16 +5,6 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Navbar } from './Navbar';
 
-type Thread = {
-  id: string;
-  category: string;
-  title: string;
-  description: string;
-  creationDate: string;
-  creator?:User,
-  locked?:boolean
-};
-
 const LandingPage: React.FC = () => {
   const router = useRouter();
   const [threads, setThreads] = useState<Thread[]>([]);
@@ -118,7 +108,7 @@ return (
                   </h2>
                   {
                     thread.locked && (
-                      <span className='mt-2 p-5'>Thread closed</span>
+                      <span className='bg-red-500 text-center text-white font-bold rounded-full mt-2 p-5'>Thread closed</span>
                     )
                   }
                 </div>

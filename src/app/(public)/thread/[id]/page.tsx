@@ -6,21 +6,6 @@ import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 
 
-type Comment = {
-    content: string;
-    creator: string;
-    isAnswer?: boolean
-}
-
-type Data = {
-    id: string;
-    category: string;
-    title: string;
-    description: string;
-    creationDate: string;
-    comments: Comment[];
-  };
-
 function Thread() {
     const [data, setData] = useState<Data>({
       id: "",
@@ -109,7 +94,7 @@ function Thread() {
       
       if (newComment.trim() === "") return;
   
-      const updatedComments: Comment[] = [
+      const updatedComments: UserComment[] = [
         ...data.comments,
         { content: newComment, creator: loggedUser.userName },
       ];
