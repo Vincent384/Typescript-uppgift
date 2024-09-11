@@ -1,4 +1,5 @@
 'use client'
+import { Navbar } from '@/app/components/Navbar';
 import { registerValidate } from '@/app/components/registerValidate';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -80,6 +81,8 @@ const Register = () => {
 
     }
       return (
+        <>
+        <Navbar/>
         <div className='h-screen bg-blue-900 p-10 flex justify-center'>
             <form onSubmit={onSubmitHandler} className='flex flex-col justify-center m-auto w-[500px] bg-white/95 rounded-lg p-10'>
                 <h1 className='text-center font-bold text-xl mb-3'>Register</h1>
@@ -95,6 +98,7 @@ const Register = () => {
             <Toaster reverseOrder={false} />
             </div>
             
+        </>
       )
     }
 

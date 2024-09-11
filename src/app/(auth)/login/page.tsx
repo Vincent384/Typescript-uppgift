@@ -1,5 +1,6 @@
 'use client'
 
+import { Navbar } from '@/app/components/Navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
@@ -66,7 +67,8 @@ function onSubmitHandler(e: React.FormEvent<HTMLFormElement>){
         router.push('/')      
     }, 2000);
 }
-  return (
+  return (<>
+        <Navbar/>
     <div className='h-screen bg-blue-900 p-10 flex justify-center'>
         <form onSubmit={onSubmitHandler} className='flex flex-col justify-center m-auto w-[500px] bg-white/95 rounded-lg p-10'>
             <h1 className='text-center font-bold text-xl mb-3'>Login</h1>
@@ -80,6 +82,7 @@ function onSubmitHandler(e: React.FormEvent<HTMLFormElement>){
         <Toaster reverseOrder={false} />
         </div>
         
+  </>
   )
 }
 

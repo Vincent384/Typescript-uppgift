@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { Lock, LockOpen } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { Navbar } from './Navbar';
 
 type Thread = {
   id: string;
@@ -64,6 +65,7 @@ const LandingPage: React.FC = () => {
 
 return (
   <div>
+    <Navbar/>
     <div className='w-[700px] m-auto'>
       <h1 className='text-white font-bold bg-blue-400 p-5 rounded-lg mt-10 text-3xl'>Threads</h1>
       <div>

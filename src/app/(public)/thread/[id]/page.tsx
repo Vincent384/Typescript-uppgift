@@ -1,4 +1,5 @@
 "use client"
+import { Navbar } from '@/app/components/Navbar';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react'
 import { useEffect, useState } from 'react'
@@ -172,6 +173,8 @@ function Thread() {
     }
 
   return (
+    <>
+    <Navbar/>
     <div className='flex justify-center items-center'>
         <div className="d-thread-container">
             <div className="d-thread-container-top">
@@ -209,8 +212,8 @@ function Thread() {
                             <div className='flex justify-between items-center mt-3'>
                               <p className=''>{comment.content}</p>
                               {data.category === 'QNA' && loggedUser && (
-                                  <button
-                                    onClick={() => markAsAnswer(index)}
+                                <button
+                                onClick={() => markAsAnswer(index)}
                                     className={`px-2 py-2 bg-emerald-700 text-white font-bold rounded-lg ${comment.isAnswer ? 'active' : ''}`}
                                   >
                                     {comment.isAnswer ? '✔ Answer' : 'Mark as Answer'}
@@ -223,6 +226,7 @@ function Thread() {
             </div>
         </div>
     </div>
+                                </>
   )
 }
 
